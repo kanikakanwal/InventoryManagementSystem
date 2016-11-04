@@ -1,0 +1,77 @@
+{{extend 'layout.html'}}
+<html>
+	<head>
+		<style>
+			body{
+				text-align: center;
+			}
+			#demo{
+				margin-left: auto;
+				margin-right: auto;
+				background-color: none;
+				border: none;
+				font-size: 2em;
+				width: 70%;
+				min-height: 100px;
+				padding: 20px;
+			}
+			#driver{
+				margin-left: auto;
+				margin-right: auto;
+				width: 70%;
+				min-height: 30px;
+			}
+            .one{
+                width:45px;height:35px;
+                -moz-border-radius:5px;background-image:url("/Inventory_Management_System/static/images/left2.png");
+                background-repeat: no-repeat;
+                background-position:center;
+            }
+
+		</style>
+	</head>
+	<body>
+        <div id="driver">
+			<h3><i><b>There is nothing like staying at home, for real comfort...</b></i></h3>
+		</div>
+		<div id="demo">
+			<img id="thumbimg" src="/Inventory_Management_System/static/images/2.jpg" alt="No Image found" />
+		</div>
+        <div>
+            <button id="imageToggle" class="one"></button>&nbsp;&nbsp;
+            <button name="login" type="button" onclick="location.href ='{{=URL('default','index2')}}';"> <b>Login</b></button>
+        </div>
+        </div>
+	</body>
+</html>
+{{block page_js}}
+<script>
+$("document").ready(function(){
+	$("#imageToggle").click(function(){
+		//alert('clicked');
+		var url = "/Inventory_Management_System/static/images/3.jpg";
+		var seq = $("#thumbimg").attr("data-seq");
+		if(seq==null){ seq=3;}
+
+        //changing image once
+		if(seq==3){url = "/Inventory_Management_System/static/images/3.jpg";
+		$("#thumbimg").attr("src",url);}
+
+        if(seq==4){url = "/Inventory_Management_System/static/images/4.jpg";
+		$("#thumbimg").attr("src",url);}
+
+        if(seq==5){url = "/Inventory_Management_System/static/images/5.jpg";
+		$("#thumbimg").attr("src",url);}
+
+		if(seq>5){$("#thumbimg").attr("data-seq","2");
+        seq=2;
+        url = "/Inventory_Management_System/static/images/2.jpg";
+        $("#thumbimg").attr("src",url);}
+
+        seq=parseInt(seq)+1
+        $("#thumbimg").attr("data-seq",seq);
+
+	});
+});
+</script>
+{{end page_js}}

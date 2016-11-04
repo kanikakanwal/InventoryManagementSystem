@@ -1,0 +1,104 @@
+{{extend 'layout.html'}}
+<h3>
+    Reports by month
+</h3>
+</br>
+</br>
+
+<head>
+    <style>
+        select {
+        padding:3px;
+        margin: 0;
+        -webkit-border-radius:4px;
+        -moz-border-radius:4px;
+        border-radius:4px;
+        -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        background: #000066;
+        color:#BABAF8;
+        border:none;
+        outline:none;
+        display: inline-block;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+}
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+        select {padding-right:18px}
+}
+
+        label {position:relative}
+        label:after {
+            content:'<>';
+            font:11px "Consolas", monospace;
+            color:#aaa;
+            -webkit-transform:rotate(90deg);
+            -moz-transform:rotate(90deg);
+            -ms-transform:rotate(90deg);
+            transform:rotate(90deg);
+            right:8px; top:2px;
+            padding:0 0 2px;
+            border-bottom:1px solid #ddd;
+            position:absolute;
+            pointer-events:none;
+        }
+        label:before {
+            content:'';
+            right:6px; top:0px;
+            width:20px; height:20px;
+            background:#f8f8f8;
+            position:absolute;
+            pointer-events:none;
+            display:block;
+        }
+    </style>
+</head>
+
+<body>
+    <form  method="post" name="" action="{{=URL('default','generateReport')}}">
+
+    <table>
+        <tr>
+            <td>
+                Select Month:
+            </td>
+            <td>
+                 &nbsp; &nbsp;  <select name="monList">
+                        <option value="1" selected="selected">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+
+                    </select>
+            </td>
+         <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+       <td>
+            <button name="selMon" type="submit"> Submit Bill</button>
+       </td>
+
+            </tr>
+         </table>
+    </form>
+</body>
+
+{{block page_js}}
+<script>
+    function getMonth(){
+        var month = prompt("Fetch Bill Report for which Month ?", "1");
+        if (month < 1 || month > 12) {
+           alert("Please enter a valid Month Number!")
+        }
+    }
+</script>
+{{end page_js}}

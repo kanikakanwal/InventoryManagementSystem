@@ -1,0 +1,100 @@
+{{extend 'layout.html'}}
+<head>
+     <style>
+      .btn1 {
+	-moz-box-shadow: 0px 10px 14px -7px #19464d;
+	-webkit-box-shadow: 0px 10px 14px -7px #19464d;
+	box-shadow: 0px 10px 14px -7px #19464d;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #599bb3), color-stop(1, #408c99));
+	background:-moz-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-webkit-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-o-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-ms-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#599bb3', endColorstr='#408c99',GradientType=0);
+	background-color:#599bb3;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 26px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.btn1:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #408c99), color-stop(1, #599bb3));
+	background:-moz-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-webkit-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-o-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-ms-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#408c99', endColorstr='#599bb3',GradientType=0);
+	background-color:#408c99;
+}
+.btn1:active {
+	position:relative;
+	top:1px;
+}
+    </style>
+</head>
+<div style="float:left;">
+<h3><b>Received Orders</b></h3>
+<br/>
+<br/>
+</div>
+<div style="float:right;">
+    <br/>
+    <button name="adminHome" class="btn1" type="button" onclick="location.href='{{=URL('default','adminHome')}}';">Home</button></div>
+  <div>
+               <form method="post" id="addStk" action="{{=URL('default','addToStock')}}">
+                <table  class="table" >
+                     <tr>
+                                    <td><b>ORDER-ID</b></td>
+                                    <td><b>ITEM ID</b></td>
+                                    <td><b>QUANTITY ORDERED</b></td>
+                                    <td><b>PURCHASE DATE</b></td>
+                                    <td><b>STATUS</b></td>
+                                    <td><b>VENDOR</b></td>
+                     </tr>
+                    {{for row in rows:}}
+                       {{if row.status == "Stock_Received":}}
+                             <tr>
+                                    <td>{{=row.id}}</td>
+                                    <td>{{=row.item_id}}</td>
+                                    {{val=db(db.stock.item_id==row.item_id).select(db.stock.item_threshold)}}
+                                         {{for r in val:}}
+                                             <td>{{=r.item_threshold}}</td>
+                                         {{pass}}
+                                    <td>{{=row.purchase_date}}</td>
+                                    <td>{{=row.status}}</td>
+                                     <td>{{=row.vendor}}</td>
+                                    <td><input type="checkbox" name="entrySelect" value="{{=row.item_id}}" class="entry"/></td>
+                                </tr>
+                        {{pass}}
+                    {{pass}}
+                <tr><td><input type="submit" name="addStk" class="btn1" id="addstkBt" value="Add to Stock"/></td></tr>
+                </table>
+                </form>
+                </div>
+    </div>
+</div>
+{{block page_js}}
+<script>
+   jQuery(function ($) {
+    //form submit handler
+    $('#addStk').submit(function (e) {
+        //check atleat 1 checkbox is checked
+        if (!$('.entry').is(':checked')) {
+            //prevent the default form submit if it is not checked
+            alert("Please select some order!")
+            e.preventDefault();
+        }
+    })
+})
+</script>
+{{end page_js}}

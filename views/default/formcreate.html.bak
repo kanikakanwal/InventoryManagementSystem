@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+<h1>Item Table</h1>
+DROP-DOWN LIST  
+ 
+
+<select name="item_name">
+    <option value="bed" selected="selected">Beds</option>
+    <option value="chair">Chairs</option>
+    <option value="table">Tables</option>
+    <option value="sofa">Sofas</option>
+    <option value="almirah">Almirahs</option>
+
+</select>

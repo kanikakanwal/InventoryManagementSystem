@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+<h1>This is the default/addToStock.html template</h1>
+
+
+
+ele:
+
+{{for e in addingTostk_dict['entrySelect']}}
+{{print "hi"}}
+{{=e}}
+
+{{pass}}

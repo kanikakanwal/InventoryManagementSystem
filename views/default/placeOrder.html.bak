@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+
+<h1>
+    Placing orders
+</h1>
+{{=item_selectionsList}}
+{{=length}}
+{{=flag}}

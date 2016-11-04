@@ -1,0 +1,126 @@
+{{extend 'layout.html'}}
+
+<head>
+     <style>
+      .btn1 {
+	-moz-box-shadow: 0px 10px 14px -7px #19464d;
+	-webkit-box-shadow: 0px 10px 14px -7px #19464d;
+	box-shadow: 0px 10px 14px -7px #19464d;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #599bb3), color-stop(1, #408c99));
+	background:-moz-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-webkit-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-o-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-ms-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#599bb3', endColorstr='#408c99',GradientType=0);
+	background-color:#599bb3;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 26px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.btn1:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #408c99), color-stop(1, #599bb3));
+	background:-moz-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-webkit-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-o-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-ms-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#408c99', endColorstr='#599bb3',GradientType=0);
+	background-color:#408c99;
+}
+.btn1:active {
+	position:relative;
+	top:1px;
+}
+          div.centeredlogo {
+        width: 50px;
+        height: 50px;
+        float: left;
+        text-align: center;
+            background: white;
+    }
+
+    div.centeredlogo img {
+        vertical-align: middle;
+    }
+
+    </style>
+</head>
+
+<div>
+    <div class="centeredlogo" background="black">
+        <img src="/Inventory_Management_System/static/images/jk_logo.jpg" alt="My Logo"  height="50px" width="50px"/>
+    </div>
+    <div style="float:left;">
+ <h3> <b>&nbsp;&nbsp;Welcome {{=auth.user.first_name}}!</b>  
+    </div>
+</h3>
+    </div>
+
+
+<div class="container">
+        <div id="web2py_user_form" class="col-lg-6" style="float:right">
+            <br/>
+            <br/>
+            <button name="chkStatus" class="btn1" onclick="location.href ='{{=URL('default','orderStock')}}';"> All Stocks </button>
+            <button name="chkOrder" class="btn1" onclick="location.href ='{{=URL('default','allOrderStock')}}';"> Check Orders </button>
+            <br/>
+            <br/>
+    </div>
+    <div class="row">
+
+        <div >
+                <form method="post" id="placeOrdrForm" action="{{=URL('default','placeOrder')}}" >
+                <table  class="table">
+                     <tr>
+                                    <td><b>STOCK ID</b></td>
+                                    <td><b>ITEM ID</b></td>
+                                    <td><b>QUANTITY</b></td>
+                                    <td><b>ITEM THRESHOLD</b></td>
+                                    <td><b>SELECTION</b></td>
+                     </tr>
+                    {{for row in rows:}}
+                        {{quantity=row.quantity}}
+                        {{item_threshold=row.item_threshold}}
+                        {{order_placing_flag=row.order_placing_flag}}
+                        {{minThreshold=item_threshold/4 }}
+                        {{if minThreshold > quantity and order_placing_flag == 'OFF':}}
+                             <tr>
+                                    <td>{{=row.id}}</td>
+                                    <td>{{=row.item_id}}</td>
+                                    <td>{{=quantity}}</td>
+                                    <td>{{=item_threshold}}</td>
+                                    <td><input type="checkbox" name="entrySelect" value="{{=row.id}}" class="entry"/></td>
+                                </tr>
+                        {{pass}}
+                    {{pass}}
+                 <tr><td><br/><br/><input type="submit" name="orderSub" id="orderBt" class="btn1" value="Place Order"/></td></tr>
+                </table>
+                </form>
+                </div>
+    </div>
+</div>
+{{block page_js}}
+<script>
+   jQuery(function ($) {
+    //form submit handler
+    $('#placeOrdrForm').submit(function (e) {
+        //check atleat 1 checkbox is checked
+        if (!$('.entry').is(':checked')) {
+            //prevent the default form submit if it is not checked
+            alert("Please select some item!")
+            e.preventDefault();
+        }
+    })
+})
+</script>
+{{end page_js}}

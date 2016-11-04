@@ -1,0 +1,150 @@
+# -*- coding: utf-8 -*-
+# this file is released under public domain and you can use without limitations
+
+#########################################################################
+## This is a sample controller
+## - index is the default action of any application
+## - user is required for authentication and authorization
+## - download is for downloading files uploaded in the db (does streaming)
+#########################################################################
+def checkmembership():
+
+    if auth.has_membership(group_id='admin_group'):
+        redirect(URL('default', 'adminHome'))
+    if auth.has_membership(group_id='Manager'):
+        redirect(URL('default', 'managerHome'))
+
+def index():
+#    SQLFORM.factory(Field('category, requires=IS_IN_DB(db,'x'))
+    return locals()
+
+
+@auth.requires(checkmembership)
+def index2():
+#    SQLFORM.factory(Field('category, requires=IS_IN_DB(db,'x'))
+    return locals()
+
+@auth.requires_membership('admin_group')
+def item_create():
+    my_form=SQLFORM(db.item).process()
+    return locals()
+
+@auth.requires_membership('admin_group')
+def item_show():
+    rows=db(db.item).select()
+    return locals()
+
+@auth.requires_membership('admin_group')
+def modify():
+    grid=SQLFORM.grid(db.item)
+    return locals()
+
+def my_signup():
+    return dict(form=auth.register())
+
+@auth.requires_membership('admin_group')
+def adminHome():
+    return dict(name='Admin')
+
+@auth.requires_membership('admin_group')
+def updateToStock():
+    rows=db(db.orders).select()
+    return locals()
+
+
+
+@auth.requires_membership('Manager')
+def managerHome():
+    response.flash=T("Welcome! Manager, Following are the stock below their threshold...")
+    rows=db(db.stock).select()
+    return locals()
+
+@auth.requires_membership('Manager')
+def orderStock():
+    grid=SQLFORM.grid(db.stock)
+    return locals()
+
+@auth.requires_membership('Manager')
+def allOrderStock():
+    grid=SQLFORM.grid(db.orders)
+    return locals()
+
+@auth.requires_membership('Manager')
+def placeOrder():
+    item_selectionsList=[]
+    orderplacing_dict = request.vars
+    length=len(orderplacing_dict['entrySelect'])
+    try:
+	item_selectionsList=int(orderplacing_dict['entrySelect'])
+    except TypeError:
+   	print("Incorrect Number of CMD ARGS!")
+   	sys.exit(0)
+
+#     item_selectionsList=request.vars['entrySelect']
+#     for elem in item_selectionsList:
+#         itemRow = db.stock[elem]
+#         db.orders.purchase_date.default=request.now
+#         ven_dict=getVendor(itemRow.item_id)
+#insert to order table
+
+#         db.orders.insert(item_id=itemRow.item_id)
+#         db.orders.update_or_insert(db.orders.item_id== itemRow.item_id, status = "Stock_Ordered" , vendor = ven_dict['ven'])
+
+#         db(db.stock.id == elem).update(order_placing_flag='ON')
+    return locals()
+
+def getVendor(elem):
+    itemRow = db.item[elem]
+    ven=itemRow.vendor
+    return locals()
+
+def addToStock():
+    item_selectionsList=[]
+    addingTostk_dict = request.vars
+    item_selectionsList=addingTostk_dict['entrySelect']
+
+#     for elem in item_selectionsList:
+#         record = db(db.stock.item_id==elem).select()
+#         for row in record:
+#             quantity = row.quantity
+#             threshold = row.item_threshold
+#             new_quantity = quantity + threshold
+#             db(db.stock.item_id==elem).update(quantity=new_quantity)
+#     response.flash=T("Added the selected stocks.")
+    return locals()
+
+def user():
+    """
+    exposes:
+    http://..../[app]/default/user/login
+    http://..../[app]/default/user/logout
+    http://..../[app]/default/user/register
+    http://..../[app]/default/user/profile
+    http://..../[app]/default/user/retrieve_password
+    http://..../[app]/default/user/change_password
+    http://..../[app]/default/user/manage_users (requires membership in
+    http://..../[app]/default/user/bulk_register
+    use @auth.requires_login()
+        @auth.requires_membership('group name')
+        @auth.requires_permission('read','table name',record_id)
+    to decorate functions that need access control
+    """
+    return dict(form=auth())
+
+@cache.action()
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)
+
+
+def call():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return service()

@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+<h1>This is create bill page</h1>
+{{=billdetails_dict}}
+
+qty:
+{{=quantity}}
+
+customer is:
+{{=customer}}
+
+item is:
+{{=selected_item}}
+
+category is:
+{{=selected_category}}
